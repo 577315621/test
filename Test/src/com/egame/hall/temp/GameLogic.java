@@ -194,7 +194,8 @@ public class GameLogic {
 		}
 		List<StringBuffer> string = new ArrayList<>();
 		List<StringBuffer> sb = getXianCount(re, lie, 0, string);
-		return GameQueryUtil.getIdsByLoaction(sb);
+//		return GameQueryUtil.getIdsByLoaction(sb);
+		return null;
 	}
 
 	/**
