@@ -1,3 +1,4 @@
+package mytest;
 
 
 public enum Prize {
