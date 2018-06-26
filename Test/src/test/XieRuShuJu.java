@@ -11,7 +11,7 @@ import mytest.Util;
  * @author tony
  *
  */
-public class Test5 {
+public class XieRuShuJu {
 	static List<Prize> column = null;
 
 	public static void main(String[] args) {

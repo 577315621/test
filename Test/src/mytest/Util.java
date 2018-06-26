@@ -285,7 +285,7 @@ public class Util {
 		try {
 			Class.forName(driverName);
 			conn = DriverManager.getConnection(url, user, password);
-			stat = conn.prepareStatement("insert into line (id,location,gameCode) values (?,?,'SpringDay')");
+			stat = conn.prepareStatement("insert into line (id,location,gameCode) values (?,?,'DragonBall')");
 			stat.setInt(1,id); 
 		    stat.setString(2,data); 
 			int rows = stat.executeUpdate();
