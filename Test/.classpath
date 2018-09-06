@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="lib/commons-logging-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="lib/result.jar"/>
+	<classpathentry kind="lib" path="lib/dbMaker-1.2.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
