@@ -18,6 +18,15 @@ public class Test {
 	 */
 	public static void main(String[] args) {
 	
+		//这里你我们将封装有数据的对象实例，转换为字节数组，用于数据传输、存储等
+		byte[] stuByte =getByte();
+		//这里得到了stuBte字节数组后，我们可以将该数据进行数据传输或存储，这里至于用什么技术传输就根据具体情况而定
+		//假如这里stuByt通过传输，下面的代码接到了该数据
+		printByte(stuByte);
+		
+	}
+	
+	public static byte[] getByte(){
 		//获得Student对象
 		//这里的Student对象构造器被私有化，我们通过通过Student的内部类Builder来构建builder
 		ProtoDemo.Student.Builder builder =  ProtoDemo.Student.newBuilder();
@@ -40,14 +49,11 @@ public class Test {
 		Student stu = builder.build();
 		//这里你我们将封装有数据的对象实例，转换为字节数组，用于数据传输、存储等
 		byte[] stuByte = stu.toByteArray();
-System.out.print("[");
-for (byte b : stuByte) {
-	System.out.print(b+",");
-}
-System.out.print("]");
-		//这里得到了stuBte字节数组后，我们可以将该数据进行数据传输或存储，这里至于用什么技术传输就根据具体情况而定
-		//假如这里stuByt通过传输，下面的代码接到了该数据
-		
+		return stuByte;
+	}
+
+	public static void printByte(byte[] stuByte){
+
 		//接收方 ,这里为了方便我们就写在一个类里面
 		try {
 			//将字节数据转换为对应的对象实例
@@ -68,5 +74,5 @@ System.out.print("]");
 			e.printStackTrace();
 		}
 	}
-
+	
 }

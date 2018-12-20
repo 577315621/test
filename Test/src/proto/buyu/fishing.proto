@@ -1,0 +1,174 @@
+syntax = "proto3";
+option java_package = "com.fishing";
+option java_outer_classname = "GameCMD";
+option java_multiple_files = false;
+
+//游戏登陆
+message c2s_hall_login {
+  	uint32 userID =1;
+  	string password = 2;
+  	string userIP = 3;
+  	uint32 clientType =4;
+  	string clientDetail	=5;
+}
+
+//游戏登陆
+message s2c_hall_login {
+  	uint32 errorCode =1;
+  	string errorMessage = 2;
+  	string userName = 3;
+  	uint32 userID =4;
+  	double balance	=5;
+  	uint32 userSwitch =6;	//玩家信息显示开关（0开，1关）
+  	string huilvType =7;
+  	repeated GameCategory gameCategory =8;
+  	string agentCode =9;
+  	uint32 userType =10;	//玩家类型(0：正式账号1：测试账号2:试玩账号)
+  	string userConfig =11;
+} 
+//游戏菜单
+message GameCategory{
+	string categoryCode =1;
+  	string categoryName =2;
+  	uint32 sort =3;
+  	GameServers gameServers =4;
+}
+  //游戏菜单下的所属游戏
+message GameServers{
+	string gameCode =1;
+	string gameName =2;
+	uint32 style =3;
+	uint32 sort =4;
+	uint32 isMultiPlayers =5;
+}
+
+
+//ping 101
+message s2c_ping{
+	uint64 time =1;
+}
+
+//CMD:102 推送游戏信息
+message s2c_gameInfo{
+	double bigGoldPool =1; //大彩池
+	uint32 bigGoldPoolState=2;//大彩金池状态（1，吐奖期；2，吐奖前期；3吸奖期）
+	double todayPushMoney =3;//今日吐彩
+	repeated GameServerInfo gameServerInfo =4; //游戏信息
+}
+message GameServerInfo{
+	string gameCode=1;//游戏编码
+	double gameGoldPool=2;//游戏彩金
+	uint32 inGamePlayers=3;//游戏人数
+	uint32 specialStatus =4;//是否显示特殊状态（0显示，1不显示）
+	uint32 generalStatus=5;//彩金池状态（0正常，1周一福利，2周二福利，3周三福利，4周四福利，5周五福利，6周六福利，7周日福利，8节日福利）
+	uint32 payoutStatus=6;//是否为派彩状态（0，是，1否）
+	uint32 isMaintain =7;//是否维护（0:是 1:否）
+}
+
+//CMD:103 请求服务器地址
+message c2s_getServerAddress{
+	string gameCode =1;//游戏编码
+}
+message s2c_getServerAddress{
+	uint32 errorCode =1;	//错误码
+	string errorMessage=2;//错误信息
+	string gameCode	=3;//游戏编码
+	string gameServerIP=4;//游戏IP
+	uint32 gameServerPort=5;//游戏端口
+	string gamePassWord =6; //登录游戏动态密码
+}
+
+//CMD:104 推送公告
+message s2c_notice{
+	string message =1;//公告内容
+	uint32 type=2;//公告类型（0 跑马灯 1紧急公告,2玩家中奖公告
+}
+
+//CMD:105 账单
+message c2s_getRecord{
+	uint32 pageSize=1;//每页显示条数
+	uint32 currPage=2;//当前页面
+	string startTime=3;//开始时间
+	string endTime =4;//结束时间
+}
+message s2c_getRecord{
+	uint32 currPage=1;//当前页面
+	uint32 itemCount =2;//当前查询出来的总条数
+	repeated AccountInfos accountInfos =3;//账务详情
+}
+message AccountInfos{
+	uint32 betId =1;//注单id
+    string createTime =2;// 账单生成时间
+    string gameCode =3;// 游戏编码
+    string gameName =4;// 游戏名称
+    string sequence =5;// 局号
+    double betScore =6;// 投注金额
+    double betResult =7;// 中奖金额
+    double balanceBefore =8;// 下注前余额
+    double balanceAfter =9;// 下注后余额
+}
+
+
+//CMD:106 推送玩家余额变动
+message s2c_pushPlayerBalance{
+	uint32 userID =1;//玩家ID
+	double balance =2;//玩家余额
+}
+//CMD:107 广播玩家被踢下线
+message s2c_pushPlayerDownline{
+	uint32 userID =1;	//玩家ID（不能为0，-1代表对应代理商旗下的所有会员）
+	string agentCode =2;//代理商编码 (不能为空，-1代表所有代理商)
+	uint32 code	=3;//0:后台踢线;1:维护踢线;2为被同一账号挤下线
+	string gameCode =4;//提线游戏代码。大厅为Hall
+	string message	=5;//说明信息
+}
+//CMD:108 推送游戏维护信息 ( 用于大厅显示对应的游戏维护情况 )
+message s2c_pushGameMaintain{
+	string gameCode	=1;//游戏编码
+	uint32 isMaintain =2;//是否维护（0:是 1:否）
+}
+//CMD:109 推送游戏菜单变更信息
+message s2c_pushGameCategory{
+	repeated GameCategory gameCategory =1;//游戏菜单 与登陆信息那个一致
+}
+
+//CMD:110 账单详细
+message c2s_getRecordDetail{
+	uint32 id =1;//注单ID
+}	
+message s2c_getRecordDetail{
+	uint32 id =1;//注单ID
+	string icon =2;//中奖鱼图标编号
+	double betResult =3;//所中金额
+	uint32 odd =4;//所得倍数(预留参数)
+}
+
+//CMD111: 推送游戏房间消息
+message s2c_pushGameRoomInfo{
+	uint32 roomId =1;//房间ID
+	string gameCode	=2;//游戏编号
+	string roomName	=3;//房间名称
+	uint32 maxPlayerCount =4;//最大人数
+	uint32 currPlayerCount =5;//当前人数
+	repeated RoomData roomData =6;//座位信息
+}
+message RoomData{
+	uint32 seatId =1;// 座位ID
+    uint32 isUse =2;// 是否有人 0 没人  1有人
+    uint32 style =3;// 当前样式
+}
+
+//CMD112: 推送游戏房间更新消息
+message s2c_pushGameRoomUpdate{
+	uint32 roomId =1;//房间ID
+	repeated RoomData roomData =2;//座位信息
+}
+
+//CMD113: 关闭游戏列表
+message c2s_closeGame{
+	string gameCode	=1;//游戏编号
+}
+message s2c_closeGame{
+	uint32 errorCode =1;//	错误码
+	string errorMessage	=2;//	错误信息
+}
